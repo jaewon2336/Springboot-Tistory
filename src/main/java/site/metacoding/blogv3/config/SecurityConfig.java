@@ -14,7 +14,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
 
         // super.configure(http); 부모 메서드 안쓸거야!!
-        http.csrf().disable();
+        http.csrf().disable(); // 이거 안하면 postman 테스트 못함
         http.authorizeRequests()
                 .antMatchers("/s/**").authenticated()
                 .anyRequest().permitAll()
