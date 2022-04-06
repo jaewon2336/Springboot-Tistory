@@ -10,12 +10,12 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import org.apache.catalina.User;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import site.metacoding.blogv3.domain.category.Category;
+import site.metacoding.blogv3.domain.user.User;
 
 @EntityListeners(AuditingEntityListener.class)
 @Entity
