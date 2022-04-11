@@ -1,0 +1,33 @@
+.my_navbar {
+    display: flex;
+    justify-content: space-between;
+    padding: 30px;
+    background-color: white;
+    color: black;
+    border-bottom: 1px solid rgb(25, 25, 25);
+}
+
+.my_navbar_title {
+    color: rgb(25, 25, 25);
+    font-size: 30px;
+}
+
+.my_icon_btn {
+    border: 1px solid rgb(25, 25, 25);
+    padding: 15px;
+    cursor: pointer;
+}
+
+.my_icon_btn:hover {
+    background-color: rgb(185, 185, 185);
+}
+
+.my_profile_rounded_img {
+    width: 30px;
+    height: 30px;
+    border-radius: 15px;
+}
+
+.my_hidden {
+    display: none;
+}
