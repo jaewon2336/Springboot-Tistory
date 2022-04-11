@@ -17,6 +17,13 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import site.metacoding.blogv3.domain.user.User;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
 @EntityListeners(AuditingEntityListener.class)
 @Entity
 public class Visit {
