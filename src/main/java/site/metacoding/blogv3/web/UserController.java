@@ -13,6 +13,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import lombok.RequiredArgsConstructor;
@@ -38,6 +40,11 @@ public class UserController {
         return "user/joinForm";
     }
 
+    @GetMapping("find-password")
+    public String findPassword() {
+        return "user/findPassword";
+    }
+
     @PostMapping("/join")
     public String join(@Valid JoinReqDto joinReqDto, BindingResult bindingResult) {
         // 회원가입 로직에서 유효성 검사 코드는 부가적인 코드!! -> AOP
@@ -60,4 +67,37 @@ public class UserController {
         return "redirect:login-form";
     }
 
+    @GetMapping("/api/user/username/same-check")
+    public @ResponseBody ResponseEntity<?> usernameCheck(String username) {
+
+        // 1. SELECT * FROM user WHERE username = :username
+        Optional<User> userEntity = userService.아이디중복체크(username);
+
+        if (userEntity.isEmpty()) {
+            return new ResponseEntity<>(1, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(-1, HttpStatus.OK);
+        }
+
+    }
+
+    @PutMapping("/api/send-mail")
+    public @ResponseBody ResponseEntity<?> passwordReset(@RequestParam String username) {
+
+        System.out.println("username : -------------------------" + username);
+
+        // 1. SELECT * FROM user WHERE username = :username
+        Optional<User> userOp = userService.아이디중복체크(username);
+
+        if (userOp.isPresent()) {
+
+            // 비밀번호 초기화 update!!
+            userService.비밀번호변경(userOp.get());
+
+            return new ResponseEntity<>(1, HttpStatus.OK);
+
+        } else {
+            return new ResponseEntity<>(-1, HttpStatus.OK);
+        }
+    }
 }

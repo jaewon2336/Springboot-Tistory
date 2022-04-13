@@ -29,4 +29,23 @@ public class UserService {
         userRepository.save(user);
     }
 
+    public Optional<User> 아이디중복체크(String username) {
+        return userRepository.findByUsername(username);
+    }
+
+    @Transactional
+    public void 비밀번호변경(User user) {
+        Optional<User> userOp = userRepository.findByUsername(user.getUsername());
+
+        if (userOp.isPresent()) {
+            User userEntity = userOp.get();
+
+            String encPassword = bCryptPasswordEncoder.encode("9999"); // 해시 알고리즘
+
+            userEntity.setPassword(encPassword);
+
+        } else {
+            throw new RuntimeException("비밀번호 찾기에 실패하였습니다.");
+        }
+    }
 }

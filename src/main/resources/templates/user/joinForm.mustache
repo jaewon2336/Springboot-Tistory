@@ -5,27 +5,93 @@
         <div class="my_auth_form_box">
             <div class="my_auth_form_box_title">Tistory</div>
 
-            <form action="/join" method="post">
+            <div class="my_error_box my_hidden">
+                <!-- 오류 메세지 -->
+            </div>
+
+            <form action="/join" method="post" onsubmit="return validation()">
                 <input class="my_auth_form_box_input" type="text" name="username" placeholder="유저네임" maxlength="20"
                     id="username" required />
                 <input class="my_auth_form_box_input" type="password" name="password" placeholder="비밀번호" maxlength="20"
                     id="password" required />
                 <input class="my_auth_form_box_input" type="password" name="" placeholder="비밀번호확인" maxlength="20"
-                    id="passwordCheck" required />
+                    id="password-check" required />
                 <input class="my_auth_form_box_input" type="email" name="email" placeholder="이메일" maxlength="60"
                     required />
                 <button class="my_secondary_btn" type="submit">회원가입</button>
             </form>
+
             <div class="my_auth_form_box_link">
                 <div>
                     <a href="/login-form">로그인</a>
                 </div>
-                <div>비밀번호찾기</div>
+                <div>
+                    <a href="/find-password">비밀번호찾기</a>
+                </div>
             </div>
+
         </div>
     </div>
 </div>
 
+<script>
 
+    let valid = {
+        state: false, // false를 통과해야 submit 가능
+        password: ""
+    }
+
+    // 전역적으로 유효성 검사
+    function validation() {
+        if (valid.state === false) {
+            // valid.password 내용을 div 박스안에 채워넣기
+            $(".my_error_box").text(valid.password);
+            $(".my_error_box").removeClass("my_hidden");
+            console.log(valid.state);
+        }
+        return valid.state;
+    }
+
+    // 아이디 중복체크 키보드 이벤트
+    $("#username").keyup(() => {
+        let username = $("#username").val();
+        usernameCheck(username);
+    });
+
+    // 아이디 중복체크 메서드
+    async function usernameCheck(username) {
+        let response = await fetch(`/api/user/username/same-check?username=${username}`);
+        let responseParse = await response.json();
+
+        if (responseParse == -1) {
+            alert("중복된 아이디입니다.");
+            $("#username").val("");
+        }
+    }
+
+    // 비밀번호 동일체크 키보드 이벤트
+    $("#password-check").keyup((event) => {
+        passwordSameCheck();
+    });
+
+    // 비밀번호 동일체크 메서드
+    function passwordSameCheck() {
+        // 1. password 값 찾기
+        let password = $("#password").val();
+
+        // 2. password-check 값 찾기
+        let passwordCheck = $("#password-check").val();
+
+        // 3. 두 개 값 비교하기
+        if (password == passwordCheck) {
+            valid.password = "패스워드가 동일합니다.";
+            valid.state = true;
+        } else {
+            valid.password = "패스워드가 동일하지 않습니다.";
+            valid.state = false;
+        }
+    }
+
+</script>
 
 {{> /layout/footer}}
