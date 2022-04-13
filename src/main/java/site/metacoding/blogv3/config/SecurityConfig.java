@@ -1,11 +1,19 @@
 package site.metacoding.blogv3.config;
 
+import java.io.IOException;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 
 @EnableWebSecurity // 해당 파일로 시큐리티가 활성화
 @Configuration // IoC 등록
@@ -27,7 +35,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().permitAll()
                 .and()
                 .formLogin()
-                .loginPage("/loginForm")
+                // .usernameParameter("user")
+                // .passwordParameter("pw")
+                .loginPage("/login-form")
+                .loginProcessingUrl("/login") // login 프로세스를 탄다
+                // .failureHandler(null)
+                // .successHandler(null)
                 .defaultSuccessUrl("/");
+
     }
 }

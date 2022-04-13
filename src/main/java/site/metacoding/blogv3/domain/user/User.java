@@ -14,7 +14,6 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -30,6 +29,8 @@ public class User {
 
     @Column(length = 20, nullable = false, unique = true)
     private String username;
+
+    // private String role; // admin, manager, guest(인증체크X), user(인증체크)
 
     // 1234 -> SHA256(해시 알고리즘) 사용해서 암호화 -> AB4524GDUF3AE -> 이렇게 안하면 시큐리티가 거부
     @Column(length = 100, nullable = false)
