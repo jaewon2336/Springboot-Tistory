@@ -67,37 +67,33 @@ public class UserController {
         return "redirect:login-form";
     }
 
-    @GetMapping("/api/user/username/same-check")
+    @GetMapping("/api/user/username-same-check")
     public @ResponseBody ResponseEntity<?> usernameCheck(String username) {
 
         // 1. SELECT * FROM user WHERE username = :username
-        Optional<User> userEntity = userService.아이디중복체크(username);
+        boolean isNotSame = userService.유저네임중복체크(username);
 
-        if (userEntity.isEmpty()) {
-            return new ResponseEntity<>(1, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(-1, HttpStatus.OK);
-        }
-
+        return new ResponseEntity<>(isNotSame, HttpStatus.OK);
     }
 
-    @PutMapping("/api/send-mail")
-    public @ResponseBody ResponseEntity<?> passwordReset(@RequestParam String username) {
+    // @PutMapping("/api/send-mail")
+    // public @ResponseBody ResponseEntity<?> passwordReset(@RequestParam String
+    // username) {
 
-        System.out.println("username : -------------------------" + username);
+    // System.out.println("username : -------------------------" + username);
 
-        // 1. SELECT * FROM user WHERE username = :username
-        Optional<User> userOp = userService.아이디중복체크(username);
+    // // 1. SELECT * FROM user WHERE username = :username
+    // Optional<User> userOp = userService.유저네임중복체크(username);
 
-        if (userOp.isPresent()) {
+    // if (userOp.isPresent()) {
 
-            // 비밀번호 초기화 update!!
-            userService.비밀번호변경(userOp.get());
+    // // 비밀번호 초기화 update!!
+    // userService.비밀번호변경(userOp.get());
 
-            return new ResponseEntity<>(1, HttpStatus.OK);
+    // return new ResponseEntity<>(1, HttpStatus.OK);
 
-        } else {
-            return new ResponseEntity<>(-1, HttpStatus.OK);
-        }
-    }
+    // } else {
+    // return new ResponseEntity<>(-1, HttpStatus.OK);
+    // }
+    // }
 }

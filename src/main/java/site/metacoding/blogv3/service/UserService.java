@@ -29,8 +29,14 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public Optional<User> 아이디중복체크(String username) {
-        return userRepository.findByUsername(username);
+    public boolean 유저네임중복체크(String username) {
+        Optional<User> userOp = userRepository.findByUsername(username);
+
+        if (userOp.isPresent()) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     @Transactional
