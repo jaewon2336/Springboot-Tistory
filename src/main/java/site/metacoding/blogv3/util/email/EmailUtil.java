@@ -1,4 +1,4 @@
-package site.metacoding.blogv3.web;
+package site.metacoding.blogv3.util.email;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;

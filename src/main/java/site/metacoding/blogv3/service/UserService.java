@@ -9,6 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import site.metacoding.blogv3.domain.user.User;
 import site.metacoding.blogv3.domain.user.UserRepository;
+import site.metacoding.blogv3.util.email.EmailUtil;
+import site.metacoding.blogv3.web.dto.user.PasswordResetReqDto;
 
 @RequiredArgsConstructor
 @Service // IoC 등록
@@ -17,6 +19,7 @@ public class UserService {
     // DI
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final EmailUtil emailUtil;
 
     @Transactional
     public void 회원가입(User user) {
@@ -40,18 +43,25 @@ public class UserService {
     }
 
     @Transactional
-    public void 비밀번호변경(User user) {
-        Optional<User> userOp = userRepository.findByUsername(user.getUsername());
+    public void 패스워드초기화(PasswordResetReqDto passwordResetReqDto) {
+        // 1. username, email이 같은 것이 있는지 체크 (DB)
+        Optional<User> userOp = userRepository.findByUsernameAndEmail(
+                passwordResetReqDto.getUsername(),
+                passwordResetReqDto.getEmail());
 
         if (userOp.isPresent()) {
-            User userEntity = userOp.get();
+            // 2. 같은게 있다면 DB password 초기화 - BCrypt 암호화 - update (DB)
+            User userEntity = userOp.get(); // 영속화
 
             String encPassword = bCryptPasswordEncoder.encode("9999"); // 해시 알고리즘
 
             userEntity.setPassword(encPassword);
 
+            // 3. 초기화 된 비밀번호 이메일로 전송
+            emailUtil.sendEmail(userEntity.getEmail(), "블로그 비밀번호 초기화", "초기화 된 비밀번호 : 9999");
+
         } else {
-            throw new RuntimeException("비밀번호 찾기에 실패하였습니다.");
+            throw new RuntimeException("해당 정보가 존재하지 않습니다.");
         }
     }
 }
