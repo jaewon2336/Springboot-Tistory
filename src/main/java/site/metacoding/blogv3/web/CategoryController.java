@@ -35,10 +35,15 @@ public class CategoryController {
             BindingResult bindingResult,
             @AuthenticationPrincipal LoginUser loginUser) {
 
-        UtilValid.요청에러처리(bindingResult);
+        UtilValid.요청에러처리(bindingResult); // 유효성 검사 끝!!
 
-        // User principal = (User) session.getAttribute("principal");
+        // 1. HttpSession에서 get
+        // User principal = (User) session.getAttribute("principal"); 머스태치에서 쓰려고 담은 세션
+
+        // 2. Authentication.getPrincipal(); 시큐리티에서 가져온 것
         User principal = loginUser.getUser();
+
+        // 3. getPrincipal() 캐스팅한 후 오브젝트 꺼내주기
         // LoginUser loginU = (LoginUser)
         // SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         // User principal = loginU.getUser();

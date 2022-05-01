@@ -13,7 +13,7 @@ public class WebMvcConfig implements WebMvcConfigurer { // web.xml 설정파일 
     private String uploadFolder;
 
     @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+    public void addResourceHandlers(ResourceHandlerRegistry registry) { // web.xml이 가지고있는 기본설정이므로 날리면 안됨!
         WebMvcConfigurer.super.addResourceHandlers(registry);
 
         registry

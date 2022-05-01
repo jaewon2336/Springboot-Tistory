@@ -24,7 +24,7 @@ public class PostWriteReqDto {
     @NotBlank
     private String title;
     private MultipartFile thumnailFile; // 섬네일은 null 허용
-    @NotNull
+    @NotNull // 공백은 가능한데 키값은 전송하세요
     private String content; // 컨텐트 null 허용
 
     public Post toEntity(String thumnail, User principal, Category category) {

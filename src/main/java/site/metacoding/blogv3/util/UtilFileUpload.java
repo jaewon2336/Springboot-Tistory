@@ -15,11 +15,11 @@ public class UtilFileUpload {
     public static String write(String uploadFolder, MultipartFile file) {
         UUID uuid = UUID.randomUUID();
 
-        String originalFilename = file.getOriginalFilename();
+        String originalFilename = file.getOriginalFilename(); // 충돌나니까 UUID 사용
         String uuidFilename = uuid + "_" + originalFilename; // 파일 이름 변환
         try {
             // 하드에 저장
-            Path filePath = Paths.get(uploadFolder + uuidFilename);
+            Path filePath = Paths.get(uploadFolder + uuidFilename); // I/O 작업
             Files.write(filePath, file.getBytes());
         } catch (Exception e) {
             throw new CustomException("파일 업로드 실패");

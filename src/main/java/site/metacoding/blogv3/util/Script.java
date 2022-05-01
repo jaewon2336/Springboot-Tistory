@@ -2,6 +2,7 @@ package site.metacoding.blogv3.util;
 
 public class Script {
 
+    // 오버로딩 (메세지 안띄우고싶을때)
     public static String href(String url, String msg) {
         StringBuffer sb = new StringBuffer();
         sb.append("<script>");

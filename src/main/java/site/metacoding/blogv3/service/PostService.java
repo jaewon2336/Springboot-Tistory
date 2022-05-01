@@ -33,7 +33,7 @@ public class PostService {
 
     // private static final Logger LOGGER = LogManager.getLogger(PostService.class);
 
-    @Value("${file.path}")
+    @Value("${file.path}") // yml에 등록한 키 값 찾을 때 사용하는 어노테이션
     private String uploadFolder;
 
     private final PostRepository postRepository;
@@ -142,6 +142,7 @@ public class PostService {
         return categoryRepository.findByUserId(principal.getId());
     }
 
+    // 서비스는 여러가지 로직이 공존한다. -> 단점 : 디버깅하기 힘들다.
     // 하나의 서비스는 여러가지 일을 한번에 처리한다.(여러가지 일이 하나의 트랜잭션이다.)
     @Transactional
     public void 게시글쓰기(PostWriteReqDto postWriteReqDto, User principal) {
