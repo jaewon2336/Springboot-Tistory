@@ -4,9 +4,12 @@ import java.util.List;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import site.metacoding.blogv3.config.auth.LoginUser;
 import site.metacoding.blogv3.domain.category.Category;
 import site.metacoding.blogv3.domain.post.Post;
+import site.metacoding.blogv3.domain.user.User;
 import site.metacoding.blogv3.handler.ex.CustomException;
 import site.metacoding.blogv3.service.PostService;
 import site.metacoding.blogv3.web.dto.post.PostRespDto;
@@ -25,6 +29,13 @@ import site.metacoding.blogv3.web.dto.post.PostWriteReqDto;
 public class PostController {
 
     private final PostService postService;
+
+    @DeleteMapping("/s/api/post/{id}")
+    public ResponseEntity<?> postDelete(@PathVariable Integer id, @AuthenticationPrincipal LoginUser loginUser) {
+        User principal = loginUser.getUser();
+        postService.게시글삭제(id, principal);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
     @GetMapping("/post/{id}")
     public String detail(@PathVariable Integer id, Model model, @AuthenticationPrincipal LoginUser loginUser) {

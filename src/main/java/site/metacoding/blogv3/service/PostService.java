@@ -41,6 +41,24 @@ public class PostService {
     private final UserRepository userRepository;
 
     @Transactional
+    public void 게시글삭제(Integer id, User principal) {
+        Optional<Post> postOp = postRepository.findById(id);
+
+        if (postOp.isPresent()) {
+            Post postEntity = postOp.get();
+
+            // 권한 체크
+            if (principal.getId() == postEntity.getUser().getId()) {
+                postRepository.deleteById(id);
+            } else {
+                throw new CustomException("삭제 권한이 없습니다.");
+            }
+        } else {
+            throw new CustomException("해당 게시글이 존재하지 않습니다.");
+        }
+    }
+
+    @Transactional
     public Post 게시글상세보기(Integer id) {
         Optional<Post> postOp = postRepository.findById(id);
 
