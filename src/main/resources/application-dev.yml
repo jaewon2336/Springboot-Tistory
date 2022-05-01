@@ -12,8 +12,8 @@ spring:
   mail:
     host: smtp.gmail.com # smtp 프로토콜
     port: 587
-    username: 아이디
-    password: 비밀번호
+    username: jaewon3235@gmail.com
+    password: serendipity!9870
     properties:
       mail:
         smtp:

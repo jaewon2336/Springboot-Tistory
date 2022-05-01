@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import site.metacoding.blogv3.domain.user.User;
 import site.metacoding.blogv3.domain.user.UserRepository;
-import site.metacoding.blogv3.handler.ex.CustomException;
 
 @RequiredArgsConstructor
 @Service // IoC 컨테이너에 등록됨
@@ -20,8 +19,6 @@ public class LoginService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        System.out.println("username : " + username);
-        System.out.println("DB에 확인 들어간다~~");
 
         // user가 DB에 있으면 리턴!
         Optional<User> userOp = userRepository.findByUsername(username);
