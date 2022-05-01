@@ -10,6 +10,7 @@
 <div class="container">
 
     <form action="/s/post" method="post" enctype="multipart/form-data" onsubmit="return getQuill()">
+        <!-- 카테고리 시작 -->
         <div class="form-group">
             <select class="form-control" name="categoryId">
                 {{#categories}}
@@ -17,11 +18,13 @@
                 {{/categories}}
             </select>
         </div>
-        <input type="text" placeholder="Enter Title" name="title" class="form-control">
-        <div class="form-control d-flex justify-content-end">
-            <div>섬네일 사진 등록 : <input type="file" name="thumnailFile"></div>
-        </div>
+        <!-- 카테고리 끝 -->
 
+        <!-- 제목 시작 -->
+        <input type="text" placeholder="Enter Title" name="title" class="form-control">
+        <!-- 제목 끝 -->
+
+        <!-- quill 에디터 시작 -->
         <div id="toolbar-container">
             <span class="ql-formats">
                 <select class="ql-font"></select>
@@ -65,11 +68,19 @@
                 <button class="ql-clean"></button>
             </span>
         </div>
+        <!-- quill 에디터 끝 -->
 
         <div id="editor-container"></div>
         <textarea name="content" id="content" class="my_hidden">
 
         </textarea>
+
+        <!-- 썸네일 시작 -->
+        <div class="form-control d-flex justify-content-end">
+            <div>대표 사진 등록 : <input type="file" name="thumnailFile"></div>
+        </div>
+        <!-- 썸네일 끝 -->
+
         <button type="submit" class="my_active_btn">글쓰기 등록</button>
     </form>
     <br />
