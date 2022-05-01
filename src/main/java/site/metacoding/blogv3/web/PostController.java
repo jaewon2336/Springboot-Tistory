@@ -53,8 +53,8 @@ public class PostController {
     }
 
     // post, category 다 같이 가지고 가야하니까 categoryService 사용하지 말고 postService 사용하기
-    @GetMapping("/user/{id}/post")
-    public String postList(Integer categoryId, @PathVariable Integer id,
+    @GetMapping("/user/{pageOwnerId}/post")
+    public String postList(Integer categoryId, @PathVariable Integer pageOwnerId,
             @AuthenticationPrincipal LoginUser loginUser,
             Model model,
             @PageableDefault(size = 3) Pageable pageable) {
@@ -62,9 +62,9 @@ public class PostController {
         PostRespDto postRespDto = null;
 
         if (categoryId == null) {
-            postRespDto = postService.게시글목록보기(id, pageable);
+            postRespDto = postService.게시글목록보기(pageOwnerId, pageable);
         } else {
-            postRespDto = postService.카테고리별게시글목록보기(id, categoryId, pageable);
+            postRespDto = postService.카테고리별게시글목록보기(pageOwnerId, categoryId, pageable);
         }
 
         model.addAttribute("postRespDto", postRespDto);

@@ -9,6 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import site.metacoding.blogv3.domain.user.User;
 import site.metacoding.blogv3.domain.user.UserRepository;
+import site.metacoding.blogv3.domain.visit.Visit;
+import site.metacoding.blogv3.domain.visit.VisitRepository;
 import site.metacoding.blogv3.util.email.EmailUtil;
 import site.metacoding.blogv3.web.dto.user.PasswordResetReqDto;
 
@@ -17,19 +19,26 @@ import site.metacoding.blogv3.web.dto.user.PasswordResetReqDto;
 public class UserService {
 
     // DI
+    private final VisitRepository visitRepository;
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final EmailUtil emailUtil;
 
     @Transactional
     public void 회원가입(User user) {
+        // 1. save 한번
         String rawPassword = user.getPassword(); // 1234
         // 시큐리티가 해시로 암호화 안되어있으면 로그인에 실패 -> 시큐리티에게 암호화 알고리즘 알려주는 것 : IoC 등록
         String encPassword = bCryptPasswordEncoder.encode(rawPassword); // 해시 알고리즘
-
         user.setPassword(encPassword);
 
-        userRepository.save(user);
+        User userEntity = userRepository.save(user);
+
+        // 2. save 두번
+        Visit visit = new Visit();
+        visit.setTotalCount(0L);
+        visit.setUser(userEntity); // 터뜨리고 테스트 해보기
+        visitRepository.save(visit);
     }
 
     public boolean 유저네임중복체크(String username) {
