@@ -2,13 +2,21 @@
 
 <div class="container">
 
-    <div class="my_post_detail_title"></div>
+    <div class="my_post_detail_title">
+        <h2>{{post.title}}</h2>
+    </div>
     <hr />
 
     <div class="my_post_detail_content">
-
+        <!-- html 읽기 위해 중괄호 3개 사용 -->
+        {{{post.content}}}
     </div>
 
+    <div>
+        <a class="btn btn-outline-success" href="#">수정</a>
+        <button class="btn btn-outline-danger">삭제</button>
+    </div>
+    <br />
 
 </div>
 
