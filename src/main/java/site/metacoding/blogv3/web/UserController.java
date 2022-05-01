@@ -50,11 +50,12 @@ public class UserController {
         return "redirect:login-form";
     }
 
+    // ResponseEntity 는 @ResponseBody를 붙이지 않아도 data를 리턴한다.
     @GetMapping("/api/user/username-same-check")
-    public @ResponseBody ResponseEntity<?> usernameCheck(String username) {
+    public ResponseEntity<?> usernameCheck(String username) {
 
         // 1. SELECT * FROM user WHERE username = :username
-        boolean isNotSame = userService.유저네임중복체크(username);
+        boolean isNotSame = userService.유저네임중복체크(username); // true (같지 않다)
 
         return new ResponseEntity<>(isNotSame, HttpStatus.OK);
     }

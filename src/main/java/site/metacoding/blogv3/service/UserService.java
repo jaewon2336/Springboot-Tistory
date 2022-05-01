@@ -58,17 +58,14 @@ public class UserService {
                 passwordResetReqDto.getUsername(),
                 passwordResetReqDto.getEmail());
 
+        // 2. 같은게 있다면 DB password 초기화 - BCrypt 암호화 - update (DB)
         if (userOp.isPresent()) {
-            // 2. 같은게 있다면 DB password 초기화 - BCrypt 암호화 - update (DB)
             User userEntity = userOp.get(); // 영속화
-
             String encPassword = bCryptPasswordEncoder.encode("9999"); // 해시 알고리즘
-
             userEntity.setPassword(encPassword);
 
             // 3. 초기화 된 비밀번호 이메일로 전송
             emailUtil.sendEmail(userEntity.getEmail(), "블로그 비밀번호 초기화", "초기화 된 비밀번호 : 9999");
-
         } else {
             throw new RuntimeException("해당 정보가 존재하지 않습니다.");
         }

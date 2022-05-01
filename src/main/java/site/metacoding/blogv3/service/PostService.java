@@ -50,6 +50,7 @@ public class PostService {
 
             // 권한 체크
             if (principal.getId() == postEntity.getUser().getId()) {
+                // 삭제
                 postRepository.deleteById(id);
             } else {
                 throw new CustomException("삭제 권한이 없습니다.");
@@ -91,12 +92,15 @@ public class PostService {
 
     @Transactional
     public PostDetailRespDto 게시글상세보기(Integer id, User principal) {
+
         PostDetailRespDto postDetailRespDto = new PostDetailRespDto();
 
         // 해당 페이지의 postId를 찾아서
         Integer postId = id;
+
         // 해당 페이지의 주인 userId가 무엇인지 알아야함
         Integer pageOwnerId = null;
+
         // 로그인한 사용자의 userId를 알아야함
         Integer loginUserId = principal.getId();
 
@@ -109,6 +113,7 @@ public class PostService {
 
             pageOwnerId = postEntity.getUser().getId();
 
+            // 두 값을 비교해서 동일하면 isPageOwner에 true 추가
             if (pageOwnerId == loginUserId) {
                 postDetailRespDto.setPageOwner(true);
             } else {
@@ -140,20 +145,17 @@ public class PostService {
     // 하나의 서비스는 여러가지 일을 한번에 처리한다.(여러가지 일이 하나의 트랜잭션이다.)
     @Transactional
     public void 게시글쓰기(PostWriteReqDto postWriteReqDto, User principal) {
-        // 1. 이미지파일 저장(UUID 변환해서 저장)
-        // 2. 이미지 파일명을 Post의 thumnail로 옮기기
-        // 3. title, content도 Post에 옮기기
-        // 4. userId도 Post에 옮기기
-        // 5. categoryId도 Post에 옮기기
-        // 6. save
 
+        // 1. UUID로 파일쓰고 경로 리턴 받기
         String thumnail = null;
         if (!postWriteReqDto.getThumnailFile().isEmpty()) {
             thumnail = UtilFileUpload.write(uploadFolder, postWriteReqDto.getThumnailFile());
         }
 
+        // 2. 카테고리 있는지 확인
         Optional<Category> categoryOp = categoryRepository.findById(postWriteReqDto.getCategoryId());
 
+        // 3. 카테고리 있으면 post DB에 저장
         if (categoryOp.isPresent()) {
             Post post = postWriteReqDto.toEntity(thumnail, principal, categoryOp.get());
             postRepository.save(post);

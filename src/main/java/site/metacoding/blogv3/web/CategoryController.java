@@ -37,7 +37,11 @@ public class CategoryController {
 
         UtilValid.요청에러처리(bindingResult);
 
+        // User principal = (User) session.getAttribute("principal");
         User principal = loginUser.getUser();
+        // LoginUser loginU = (LoginUser)
+        // SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        // User principal = loginU.getUser();
 
         Category category = categoryWriteReqDto.toEntity(principal);
 

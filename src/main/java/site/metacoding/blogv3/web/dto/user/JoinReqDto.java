@@ -25,7 +25,7 @@ public class JoinReqDto {
     private String password;
 
     @Size(min = 8, max = 60)
-    @NotBlank
+    @NotBlank // @NotNull, @NotEmpty 두개의 조합
     @Email
     private String email;
 
