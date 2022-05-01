@@ -53,6 +53,7 @@ public class PostService {
 
             if (visitOp.isPresent()) {
                 Visit visitEntity = visitOp.get();
+                // dto에 방문자 수 담기 (request에서 ip 주소 받아서 동일하면 증가시키지 않는 로직이 필요함)
                 Long totalCount = visitEntity.getTotalCount();
                 visitEntity.setTotalCount(totalCount + 1);
             } else {
@@ -111,7 +112,8 @@ public class PostService {
                 pageOwnerId,
                 postsEntity.getNumber() - 1,
                 postsEntity.getNumber() + 1,
-                pageNumbers);
+                pageNumbers,
+                0L);
 
         // 방문자 카운터 증가
         Optional<User> pageOwnerOp = userRepository.findById(pageOwnerId);
@@ -121,6 +123,10 @@ public class PostService {
             Optional<Visit> visitOp = visitRepository.findById(pageOwnerEntity.getId());
             if (visitOp.isPresent()) {
                 Visit visitEntity = visitOp.get();
+
+                // dto에 방문자 수 담기 (request에서 ip 주소 받아서 동일하면 증가시키지 않는 로직이 필요함)
+                postRespDto.setTotalCount(visitEntity.getTotalCount());
+
                 Long totalCount = visitEntity.getTotalCount();
                 visitEntity.setTotalCount(totalCount + 1);
             } else {
@@ -137,6 +143,7 @@ public class PostService {
         return postRespDto;
     }
 
+    @Transactional
     public PostRespDto 카테고리별게시글목록보기(int pageOwnerId, int categoryId, Pageable pageable) {
         Page<Post> postsEntity = postRepository.findByUserIdAndCategoryId(pageOwnerId, categoryId, pageable);
         List<Category> categoriesEntity = categoryRepository.findByUserId(pageOwnerId);
@@ -152,7 +159,8 @@ public class PostService {
                 pageOwnerId,
                 postsEntity.getNumber() - 1,
                 postsEntity.getNumber() + 1,
-                pageNumbers);
+                pageNumbers,
+                0L);
 
         // 방문자 카운터 증가
         Optional<User> pageOwnerOp = userRepository.findById(pageOwnerId);
@@ -162,6 +170,10 @@ public class PostService {
             Optional<Visit> visitOp = visitRepository.findById(pageOwnerEntity.getId());
             if (visitOp.isPresent()) {
                 Visit visitEntity = visitOp.get();
+
+                // dto에 방문자 수 담기 (request에서 ip 주소 받아서 동일하면 증가시키지 않는 로직이 필요함)
+                postRespDto.setTotalCount(visitEntity.getTotalCount());
+
                 Long totalCount = visitEntity.getTotalCount();
                 visitEntity.setTotalCount(totalCount + 1);
             } else {
