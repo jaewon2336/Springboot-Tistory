@@ -4,12 +4,23 @@
 }
 .my_atag_none:hover {
     text-decoration-line: none;
+    color:black;
 }
 
 .my_fakeimg {
     width: 100%;
     height: 100%;
     background-color: rgb(185, 185, 185);
+}
+
+.my_text_two_line{
+    display:-webkit-box;
+    -webkit-line-clamp:2;
+    -webkit-box-orient:vertical;
+    height: 40px;
+    line-height:20px;
+    overflow:hidden;
+    text-overflow:ellipsis;
 }
 
 .my_error_box {
