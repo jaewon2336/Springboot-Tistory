@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,7 +44,10 @@ public class PostService {
         // 5. categoryId도 Post에 옮기기
         // 6. save
 
-        String thumnail = UtilFileUpload.write(uploadFolder, postWriteReqDto.getThumnailFile());
+        String thumnail = null;
+        if (!postWriteReqDto.getThumnailFile().isEmpty()) {
+            thumnail = UtilFileUpload.write(uploadFolder, postWriteReqDto.getThumnailFile());
+        }
 
         Optional<Category> categoryOp = categoryRepository.findById(postWriteReqDto.getCategoryId());
 
@@ -54,8 +59,17 @@ public class PostService {
         }
     }
 
-    public PostRespDto 게시글목록보기(int userId) {
-        List<Post> postsEntity = postRepository.findByUserId(userId);
+    public PostRespDto 게시글목록보기(int userId, Pageable pageable) {
+        Page<Post> postsEntity = postRepository.findByUserId(userId, pageable);
+        List<Category> categoriesEntity = categoryRepository.findByUserId(userId);
+
+        return new PostRespDto(
+                postsEntity,
+                categoriesEntity);
+    }
+
+    public PostRespDto 카테고리별게시글목록보기(int userId, int categoryId, Pageable pageable) {
+        Page<Post> postsEntity = postRepository.findByUserIdAndCategoryId(userId, categoryId, pageable);
         List<Category> categoriesEntity = categoryRepository.findByUserId(userId);
 
         return new PostRespDto(
