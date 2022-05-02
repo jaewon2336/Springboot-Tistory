@@ -87,6 +87,11 @@ updateDate
 - 프로필 사진 업로드 (회원가입시)
 - 회원수정
 
+- 로그관리 (Log4j)
+- 단위테스트
+- 배포
+- AOP 처리
+
 ### Gradle depenency update
 ```
 ./gradlew --refresh-dependencie
