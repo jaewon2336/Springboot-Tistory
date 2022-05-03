@@ -39,6 +39,9 @@ public class User {
     @Column(length = 60, nullable = false)
     private String email;
 
+    @Column(nullable = true)
+    private String profileImg; // 실제로 이미지 경로
+
     @CreatedDate
     private LocalDateTime createDate;
     @LastModifiedDate

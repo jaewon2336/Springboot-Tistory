@@ -3,7 +3,13 @@
 <div class="container">
     <div class="my_auth_box">
         <div class="my_auth_form_box">
-            <div class="my_auth_form_box_title">JSotry</div>
+            <div class="d-flex justify-content-center">
+                <img id="profile-img-btn" src="https://i1.sndcdn.com/avatars-000373392764-zp0p80-t500x500.jpg"
+                    class="my_profile_rounded_img_btn_lg">
+                <form>
+                    <input id="profile-img-input" type="file" class="my_hidden" />
+                </form>
+            </div>
             <div class="my_error_box my_hidden">
 
             </div>
@@ -17,7 +23,7 @@
                     maxlength="20" required />
                 <input class="my_auth_form_box_input" type="email" name="email" placeholder="이메일" maxlength="60"
                     required readonly />
-                <button type="submit" class="my_secondary_btn">비밀번호수정</button>
+                <button type="submit" class="my_secondary_btn">회원정보수정</button>
             </form>
             <div class="my_auth_form_box_link">
                 <div><a href="/login-form">로그인</a></div>
@@ -27,5 +33,12 @@
     </div>
     <br />
 </div>
+
+<script>
+    $("#profile-img-btn").click(() => {
+        // 파일 업로드 실행
+        $("#profile-img-input").click();
+    });
+</script>
 
 {{>/layout/footer}}
