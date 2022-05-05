@@ -6,7 +6,7 @@
             <div class="d-flex justify-content-center">
                 <img id="profile-img-btn" src="https://i1.sndcdn.com/avatars-000373392764-zp0p80-t500x500.jpg"
                     class="my_profile_rounded_img_btn_lg">
-                <form>
+                <form id="profile-img-form">
                     <input id="profile-img-input" type="file" class="my_hidden" />
                 </form>
             </div>
@@ -15,15 +15,16 @@
             </div>
             <!-- 수정은 put 요청 fetch 사용해야함 -->
             <form>
-                <input id="username" class="my_auth_form_box_input" type="text" placeholder="유저네임" maxlength="20"
-                    required readonly />
+                <input id="user-id" type="hidden" value="{{principal.id}}">
+                <input id="username" class="my_auth_form_box_input" type="text" placeholder="{{principal.username}}"
+                    maxlength="20" required readonly />
                 <input id="password" class="my_auth_form_box_input" type="password" placeholder="기존 비밀번호" maxlength="20"
                     required />
                 <input id="same-password" class="my_auth_form_box_input" type="password" placeholder="수정 비밀번호"
                     maxlength="20" required />
                 <input class="my_auth_form_box_input" type="email" name="email" placeholder="이메일" maxlength="60"
                     required readonly />
-                <button type="submit" class="my_secondary_btn">회원정보수정</button>
+                <button id="btn-update" type="submit" class="my_secondary_btn">회원정보수정</button>
             </form>
             <div class="my_auth_form_box_link">
                 <div><a href="/login-form">로그인</a></div>
@@ -35,9 +36,37 @@
 </div>
 
 <script>
+
+    let userId = $("#user-id").val();
+
     $("#profile-img-btn").click(() => {
         // 파일 업로드 실행
-        $("#profile-img-input").click();
+        $("#profile-img-input").click(); // 파일 선택창 오픈
+    });
+
+    $("#profile-img-input").change((event) => { // 변화가 생기면(=파일을 선택하면)
+
+        let file = event.target.files[0];
+
+        if (!file.type.match("image.*")) {
+            alert("이미지를 선택해주세요.");
+            return;
+        }
+
+        let fileForm = $("#profile-img-form")[0];
+        let formData = new FormData(fileForm);
+
+        // fetch()
+
+        let reader = new FileReader();
+
+        // 아직 실행안됨 : 콜 백 함수
+        reader.onload = (event) => {
+            $("#profile-img-btn").attr("src", event.target.result);
+            $("#header-profile-img").attr("src", event.target.result);
+        }
+
+        reader.readAsDataURL(file);
     });
 </script>
 
