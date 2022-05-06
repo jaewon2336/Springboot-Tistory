@@ -9,6 +9,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import lombok.RequiredArgsConstructor;
 import site.metacoding.blogv3.service.UserService;
@@ -22,6 +25,15 @@ public class UserController {
 
     // DI
     private final UserService userService;
+
+    @PutMapping("/s/api/user/{id}/profile-img")
+    public ResponseEntity<?> profileImgUpdate(@PathVariable Integer id,
+            MultipartFile profileImgFile) {
+
+        userService.프로필사진수정하기(id, profileImgFile);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
     @GetMapping("/login-form")
     public String loginForm() {

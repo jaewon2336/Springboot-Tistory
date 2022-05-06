@@ -2,15 +2,19 @@ package site.metacoding.blogv3.service;
 
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import lombok.RequiredArgsConstructor;
 import site.metacoding.blogv3.domain.user.User;
 import site.metacoding.blogv3.domain.user.UserRepository;
 import site.metacoding.blogv3.domain.visit.Visit;
 import site.metacoding.blogv3.domain.visit.VisitRepository;
+import site.metacoding.blogv3.handler.ex.CustomApiException;
+import site.metacoding.blogv3.util.UtilFileUpload;
 import site.metacoding.blogv3.util.email.EmailUtil;
 import site.metacoding.blogv3.web.dto.user.PasswordResetReqDto;
 
@@ -18,11 +22,39 @@ import site.metacoding.blogv3.web.dto.user.PasswordResetReqDto;
 @Service // IoC 등록
 public class UserService {
 
+    @Value("${file.path}") // yml에 등록한 키 값 찾을 때 사용하는 어노테이션
+    private String uploadFolder;
+
     // DI
     private final VisitRepository visitRepository;
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final EmailUtil emailUtil;
+
+    @Transactional
+    public void 프로필사진수정하기(Integer userId, MultipartFile profileImgFile) {
+
+        String profileImg = null;
+
+        // 1. 유저 확인
+        Optional<User> userOp = userRepository.findById(userId);
+        if (userOp.isPresent()) {
+            User userEntity = userOp.get();
+
+            // 2. UUID로 파일 쓰고 경로 리턴 받기
+            if (!profileImgFile.isEmpty()) {
+                profileImg = UtilFileUpload.write(uploadFolder, profileImgFile);
+            } else {
+                throw new CustomApiException("이미지가 존재하지 않습니다.");
+            }
+
+            // 3. user의 profileImg 변경
+            userEntity.setProfileImg(profileImg);
+
+        } else {
+            throw new CustomApiException("존재하지 않는 사용자입니다.");
+        }
+    }
 
     @Transactional
     public void 회원가입(User user) {

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    <title>Document</title>
+</head>
+
+<body>
+    <select id="testChange">
+        <option value="">김길동</option>
+        <option value="홍길동">홍길동</option>
+        <option value="최철수">최철수</option>
+        <option value="나길동">나길동</option>
+    </select>
+
+    <img id="user-profile-img" src="" width="100px" height="100px">
+
+    <form id="fileForm">
+        <input id="fileChange" name="profileImg" type="file">
+    </form>
+
+    <script>
+        $("#testChange").change((event) => {
+            console.log(event);
+        });
+
+        $("#fileChange").change((event) => {
+            // console.log(event.target.files[0]);
+            let f = event.target.files[0];
+
+            if (!f.type.match("image.*")) {
+                // 쪼까내기
+                alert("이미지를 선택해주세요!!");
+                return;
+            }
+
+            // multipart/form-data로 파일을 전송하는 것이 가장 편하다.
+            // form 태그 자바스크립트 객체 찾기, 생성자에 form 태그를 넣어주면 자바스크립트 객체화 됨 => fileForm
+            // form 태그 key:value 데이터 변환 => formData
+            let fileForm = $("#fileForm")[0];
+            let formData = new FormData(fileForm);
+            console.log(formData);
+
+            // fetch();
+
+            let reader = new FileReader();
+
+            // 아직 실행안됨 : 콜 백 함수
+            reader.onload = (event) => {
+                $("#user-profile-img").attr("src", event.target.result);
+            }
+
+            // reader.onload(); // 메서드 실행
+
+            // 메모리나 하드에 있는 파일을 읽는 행위(내부적으로 await, asnyc, promise 일어남)
+            // 내부적으로 파일을 읽고나면 reader.onload(); 실행함(콜백)
+            reader.readAsDataURL(f);
+        });
+    </script>
+</body>
+
+</html>
