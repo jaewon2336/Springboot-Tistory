@@ -4,8 +4,16 @@
     <div class="my_auth_box">
         <div class="my_auth_form_box">
             <div class="d-flex justify-content-center">
+
+                {{#principal}}
+                {{#profileImg}}
+                <img id="profile-img-btn-lg" src="/upload/{{profileImg}}" class="my_profile_rounded_img_btn_lg">
+                {{/profileImg}}
+                {{^profileImg}}
                 <img id="profile-img-btn-lg" src="https://i1.sndcdn.com/avatars-000373392764-zp0p80-t500x500.jpg"
                     class="my_profile_rounded_img_btn_lg">
+                {{/profileImg}}
+                {{/principal}}
                 <form id="fileForm">
                     <input id="profile-img-input" name="profileImgFile" type="file" class="my_hidden" />
                 </form>
@@ -37,8 +45,6 @@
 
 <script>
 
-    let userId = $("#user-id").val();
-
     $("#profile-img-btn-lg").click(() => {
         // 파일 업로드 실행
         $("#profile-img-input").click(); // 파일 선택창 오픈
@@ -68,12 +74,11 @@
         let fileForm = $("#fileForm")[0];
         let formData = new FormData(fileForm); // form 태그가 들고있는 모든 input 데이터
 
-        let response = await fetch(`/s/api/user/${userId}/profile-img`, {
+        let response = await fetch(`/s/api/user/profile-img`, {
             method: "PUT",
             body: formData
         });
 
-        console.log(response);
         if (response.status == 200) {
             imgPreview(event, file);
         } else {

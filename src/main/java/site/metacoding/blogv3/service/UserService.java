@@ -2,6 +2,8 @@ package site.metacoding.blogv3.service;
 
 import java.util.Optional;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -32,9 +34,7 @@ public class UserService {
     private final EmailUtil emailUtil;
 
     @Transactional
-    public void 프로필사진수정하기(Integer userId, MultipartFile profileImgFile) {
-
-        String profileImg = null;
+    public void 프로필사진수정하기(Integer userId, MultipartFile profileImgFile, HttpSession session) {
 
         // 1. 유저 확인
         Optional<User> userOp = userRepository.findById(userId);
@@ -42,14 +42,13 @@ public class UserService {
             User userEntity = userOp.get();
 
             // 2. UUID로 파일 쓰고 경로 리턴 받기
-            if (!profileImgFile.isEmpty()) {
-                profileImg = UtilFileUpload.write(uploadFolder, profileImgFile);
-            } else {
-                throw new CustomApiException("이미지가 존재하지 않습니다.");
-            }
+            String profileImg = UtilFileUpload.write(uploadFolder, profileImgFile);
 
             // 3. user의 profileImg 변경
             userEntity.setProfileImg(profileImg);
+
+            // 4. 세션값 변경
+            session.setAttribute("principal", userEntity);
 
         } else {
             throw new CustomApiException("존재하지 않는 사용자입니다.");

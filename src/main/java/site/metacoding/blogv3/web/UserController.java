@@ -1,19 +1,21 @@
 package site.metacoding.blogv3.web;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import lombok.RequiredArgsConstructor;
+import site.metacoding.blogv3.config.auth.LoginUser;
 import site.metacoding.blogv3.service.UserService;
 import site.metacoding.blogv3.util.UtilValid;
 import site.metacoding.blogv3.web.dto.user.JoinReqDto;
@@ -25,12 +27,15 @@ public class UserController {
 
     // DI
     private final UserService userService;
+    private final HttpSession session;
 
-    @PutMapping("/s/api/user/{id}/profile-img")
-    public ResponseEntity<?> profileImgUpdate(@PathVariable Integer id,
+    @PutMapping("/s/api/user/profile-img")
+    public ResponseEntity<?> profileImgUpdate(@AuthenticationPrincipal LoginUser loginUser,
             MultipartFile profileImgFile) {
 
-        userService.프로필사진수정하기(id, profileImgFile);
+        // 주소로 받은 id를 사용하면 세션값과 비교해 권한체크 해줘야하기 때문에
+        // 더욱 안전하게 세션값을 사용
+        userService.프로필사진수정하기(loginUser.getUser().getId(), profileImgFile, session);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
