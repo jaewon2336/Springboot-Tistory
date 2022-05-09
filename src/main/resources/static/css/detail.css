@@ -9,3 +9,19 @@
 .my_post_detail_content img {
     width: 80%;
 }
+
+.my_post_info {
+    border: 1px solid rgb(185, 185, 185);
+    border-radius: 15px;
+    padding: 5px 15px;
+}
+
+.my_fake_like {
+    color: red;
+    cursor: pointer;
+}
+
+.my_fake_un_like {
+    color: red;
+    cursor: pointer;
+}

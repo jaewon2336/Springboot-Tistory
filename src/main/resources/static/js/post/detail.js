@@ -1,3 +1,30 @@
+// 게시글 좋아요 체크
+function postLikeClick(id) {
+    let isLike = $(`#heart-${id}`).hasClass("my_fake_like");
+
+    if (isLike) {
+        postUnLike(id);
+    } else {
+        postLike(id);
+    }
+}
+
+function postLike(id) {
+    // fetch();
+    $(`#heart-${id}`).addClass("my_fake_like");
+    $(`#heart-${id}`).removeClass("my_fake_un_like");
+    $(`#heart-${id}`).removeClass("fa-regular");
+    $(`#heart-${id}`).addClass("fa-solid");
+}
+
+function postUnLike(id) {
+    // fetch();
+    $(`#heart-${id}`).addClass("my_fake_un_like");
+    $(`#heart-${id}`).removeClass("my_fake_like");
+    $(`#heart-${id}`).removeClass("fa-solid");
+    $(`#heart-${id}`).addClass("fa-regular");
+}
+
 // 게시글 삭제, 권한체크 후 삭제 /s/api/post/postId
 $("#btn-delete").click(() => {
     postDelete();
