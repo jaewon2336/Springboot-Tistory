@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,6 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import site.metacoding.blogv3.domain.Love.Love;
+import site.metacoding.blogv3.domain.Love.LoveRepository;
 import site.metacoding.blogv3.domain.category.Category;
 import site.metacoding.blogv3.domain.category.CategoryRepository;
 import site.metacoding.blogv3.domain.post.Post;
@@ -39,6 +44,8 @@ public class PostService {
     private final PostRepository postRepository;
     private final CategoryRepository categoryRepository;
     private final VisitRepository visitRepository;
+    private final LoveRepository loveRepository;
+    private final EntityManager em; // IoC 컨테이너에서 가져옴
 
     @Transactional
     public void 게시글삭제(Integer id, User principal) {
@@ -62,7 +69,7 @@ public class PostService {
 
         PostDetailRespDto postDetailRespDto = new PostDetailRespDto();
 
-        // 게시글 가져오기
+        // 게시글 찾기
         Post postEntity = basicFindById(id);
 
         // 방문자 카운트 증가
@@ -71,6 +78,9 @@ public class PostService {
         // 리턴값 만들기
         postDetailRespDto.setPost(postEntity);
         postDetailRespDto.setPageOwner(false);
+
+        // 좋아요 유무 추가하기 (로그인 한 사람이 해당 게시글을 좋아하는지)
+        postDetailRespDto.setLove(false);
 
         return postDetailRespDto;
     }
@@ -88,6 +98,15 @@ public class PostService {
 
         // 방문자 카운트 증가
         visitIncrease(postEntity.getUser().getId());
+
+        // 좋아요 유무 추가하기 (로그인 한 사람이 해당 게시글을 좋아하는지)
+        // (1) 로그인 한 사람의 userId와 상세보기 한 postId로 Love 테이블에서 SELECT해서 row가 있으면 true
+        Optional<Love> loveOp = loveRepository.mFindByUserIdAndPostId(principal.getId(), id);
+        if (loveOp.isPresent()) {
+            postDetailRespDto.setLove(true);
+        } else {
+            postDetailRespDto.setLove(false);
+        }
 
         // 리턴값 만들기
         postDetailRespDto.setPost(postEntity);
@@ -215,4 +234,54 @@ public class PostService {
             throw new CustomException("일시적 문제가 생겼습니다. 관리자에게 문의해주세요.");
         }
     }
+
+    ////////////////////////////////////// 연습////////////////////////////////////////////////
+
+    // JPQL : Java Persistence Query Langauge
+    public Post emTest1(int id) {
+        em.getTransaction().begin(); // 트랜잭션 시작
+
+        // 쿼리를 컴파일 시점에 오류 발견하기 위해 QueryDSL 사용
+        String sql = null;
+
+        // 동적 쿼리
+        if (id == 1) {
+            sql = "SELECT * FROM post WHERE id = 1";
+        } else {
+            sql = "SELECT * FROM post WHERE id = 2";
+        }
+
+        TypedQuery<Post> query = em.createQuery(sql, Post.class); // 내부적으로 영속화 됨
+        Post postEntity = query.getSingleResult();
+
+        try {
+            // insert()
+
+            // update()
+
+            em.getTransaction().commit();
+        } catch (RuntimeException e) {
+            em.getTransaction().rollback();
+        }
+
+        em.close(); // 트랜잭션 종료
+
+        return postEntity; // 대신에 repository를 타지 않는다!
+    }
+
+    // 영속화 비영속화
+    public Love emTest2() {
+        Love love = new Love(); // 최초에는 remove 상태와 동일
+
+        em.persist(love); // SELECT 하지 않아도 영속성 컨텍스트에 넣을 수 있음, 영속화
+        em.detach(love); // 비영속화
+        em.merge(love); // 재영속화
+        em.remove(love); // 영속성 삭제
+        return love; // MessageConverter가 getter 때릴 때도 상관없다. 비영속화시켰으니까!
+
+        // 미리 필요한 애들을 다 땡겨내림 - Lazy loading 미리하기
+        // Hibernate.initialize(postEntity);
+    }
+
+    ////////////////////////////////////// 연습////////////////////////////////////////////////
 }

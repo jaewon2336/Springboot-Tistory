@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.client.ResponseExtractor;
 
 import lombok.RequiredArgsConstructor;
 import site.metacoding.blogv3.config.auth.LoginUser;
@@ -29,6 +30,19 @@ import site.metacoding.blogv3.web.dto.post.PostWriteReqDto;
 public class PostController {
 
     private final PostService postService;
+
+    // /s/api/post/{id}/lovd
+    @PostMapping("/s/api/post/{id}/lovd")
+    public ResponseEntity<?> love(@PathVariable Integer id, @AuthenticationPrincipal LoginUser loginUser) {
+        // 누가 어떤 포스트를 좋아요했는가?
+        return null;
+    }
+
+    @DeleteMapping("/s/api/post/{id}/lovd")
+    public ResponseEntity<?> unLove(@PathVariable Integer id, @AuthenticationPrincipal LoginUser loginUser) {
+        // 누가 어떤 포스트를 좋아요 취소했는가?
+        return null;
+    }
 
     @DeleteMapping("/s/api/post/{id}")
     public ResponseEntity<?> postDelete(@PathVariable Integer id, @AuthenticationPrincipal LoginUser loginUser) {
