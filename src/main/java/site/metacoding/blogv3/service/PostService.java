@@ -48,10 +48,30 @@ public class PostService {
     private final EntityManager em; // IoC 컨테이너에서 가져옴
 
     @Transactional
+    public Love 좋아요(Integer postId, User principal) {
+
+        // 숙제 : Love를 Dto에 옮겨서 비영속화된 데이터를 응답하기
+        Post postEntity = postFindById(postId);
+        Love love = new Love(); // 비영속상태
+        love.setUser(principal);
+        love.setPost(postEntity);
+
+        return loveRepository.save(love);
+    }
+
+    @Transactional
+    public void 좋아요취소(Integer loveId, User principal) {
+        // 권한체크
+        loveFindById(loveId);
+        // 숙제 : 유저아이디랑 러브의 유저아이디랑 비교
+        loveRepository.deleteById(loveId);
+    }
+
+    @Transactional
     public void 게시글삭제(Integer id, User principal) {
 
         // 게시글 찾기
-        Post postEntity = basicFindById(id);
+        Post postEntity = postFindById(id);
 
         // 권한 체크
         boolean isAuth = authCheck(postEntity.getUser().getId(), principal.getId());
@@ -70,7 +90,7 @@ public class PostService {
         PostDetailRespDto postDetailRespDto = new PostDetailRespDto();
 
         // 게시글 찾기
-        Post postEntity = basicFindById(id);
+        Post postEntity = postFindById(id);
 
         // 방문자 카운트 증가
         visitIncrease(postEntity.getUser().getId());
@@ -91,7 +111,7 @@ public class PostService {
         PostDetailRespDto postDetailRespDto = new PostDetailRespDto();
 
         // 게시글 찾기
-        Post postEntity = basicFindById(id);
+        Post postEntity = postFindById(id);
 
         // 권한체크
         boolean isAuth = authCheck(postEntity.getUser().getId(), principal.getId());
@@ -196,8 +216,19 @@ public class PostService {
 
     // 중복되는 로직 메서드화
 
-    // 아이디로 게시글 찾기
-    private Post basicFindById(Integer postId) {
+    // 아이디로 좋아요 한건 찾기
+    private Love loveFindById(Integer loveId) {
+        Optional<Love> loveOp = loveRepository.findById(loveId);
+        if (loveOp.isPresent()) {
+            Love loveEntity = loveOp.get();
+            return loveEntity;
+        } else {
+            throw new CustomApiException("해당 좋아요가 존재하지 않습니다");
+        }
+    }
+
+    // 아이디로 게시글 한건 찾기
+    private Post postFindById(Integer postId) {
         Optional<Post> postOp = postRepository.findById(postId);
         if (postOp.isPresent()) {
             Post postEntity = postOp.get();
@@ -280,7 +311,7 @@ public class PostService {
         return love; // MessageConverter가 getter 때릴 때도 상관없다. 비영속화시켰으니까!
 
         // 미리 필요한 애들을 다 땡겨내림 - Lazy loading 미리하기
-        // Hibernate.initialize(postEntity);
+        // Hibernate.initialize(love);
     }
 
     ////////////////////////////////////// 연습////////////////////////////////////////////////

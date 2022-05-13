@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.client.ResponseExtractor;
 
 import lombok.RequiredArgsConstructor;
 import site.metacoding.blogv3.config.auth.LoginUser;
+import site.metacoding.blogv3.domain.Love.Love;
 import site.metacoding.blogv3.domain.category.Category;
 import site.metacoding.blogv3.domain.user.User;
 import site.metacoding.blogv3.handler.ex.CustomException;
@@ -31,17 +31,20 @@ public class PostController {
 
     private final PostService postService;
 
-    // /s/api/post/{id}/lovd
-    @PostMapping("/s/api/post/{id}/lovd")
-    public ResponseEntity<?> love(@PathVariable Integer id, @AuthenticationPrincipal LoginUser loginUser) {
-        // 누가 어떤 포스트를 좋아요했는가?
-        return null;
+    // /s/api/post/{id}/love
+    @PostMapping("/s/api/post/{postId}/love")
+    public ResponseEntity<?> love(@PathVariable Integer postId, @AuthenticationPrincipal LoginUser loginUser) {
+        // 어떤 포스트를 누가 좋아요했는가?
+        Love loveEntity = postService.좋아요(postId, loginUser.getUser());
+        return new ResponseEntity<>(loveEntity, HttpStatus.CREATED); // body에 저장된 데이터를 주지않으면 나중에 좋아요 취소를 할 수 없음
     }
 
-    @DeleteMapping("/s/api/post/{id}/lovd")
-    public ResponseEntity<?> unLove(@PathVariable Integer id, @AuthenticationPrincipal LoginUser loginUser) {
-        // 누가 어떤 포스트를 좋아요 취소했는가?
-        return null;
+    @DeleteMapping("/s/api/post/{postId}/love/{loveId}")
+    public ResponseEntity<?> unLove(@PathVariable Integer loveId, @AuthenticationPrincipal LoginUser loginUser) {
+        // 어떤 포스트를 누가 좋아요 취소했는가?
+        // 로그인한 유저의 userId 러브에 있는 userId 비교
+        postService.좋아요취소(loveId, loginUser.getUser());
+        return new ResponseEntity<>(HttpStatus.OK); // 다시눌릴땐 어차피 다시 insert 될거라 body 필요없음
     }
 
     @DeleteMapping("/s/api/post/{id}")
