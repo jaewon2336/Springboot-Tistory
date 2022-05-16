@@ -16,11 +16,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import lombok.RequiredArgsConstructor;
 import site.metacoding.blogv3.config.auth.LoginUser;
-import site.metacoding.blogv3.domain.Love.Love;
 import site.metacoding.blogv3.domain.category.Category;
 import site.metacoding.blogv3.domain.user.User;
 import site.metacoding.blogv3.handler.ex.CustomException;
 import site.metacoding.blogv3.service.PostService;
+import site.metacoding.blogv3.web.dto.love.LoveRespDto;
 import site.metacoding.blogv3.web.dto.post.PostDetailRespDto;
 import site.metacoding.blogv3.web.dto.post.PostRespDto;
 import site.metacoding.blogv3.web.dto.post.PostWriteReqDto;
@@ -35,8 +35,8 @@ public class PostController {
     @PostMapping("/s/api/post/{postId}/love")
     public ResponseEntity<?> love(@PathVariable Integer postId, @AuthenticationPrincipal LoginUser loginUser) {
         // 어떤 포스트를 누가 좋아요했는가?
-        Love loveEntity = postService.좋아요(postId, loginUser.getUser());
-        return new ResponseEntity<>(loveEntity, HttpStatus.CREATED); // body에 저장된 데이터를 주지않으면 나중에 좋아요 취소를 할 수 없음
+        LoveRespDto loveRespDto = postService.좋아요(postId, loginUser.getUser());
+        return new ResponseEntity<>(loveRespDto, HttpStatus.CREATED); // body에 저장된 데이터를 주지않으면 나중에 좋아요 취소를 할 수 없음
     }
 
     @DeleteMapping("/s/api/post/{postId}/love/{loveId}")
