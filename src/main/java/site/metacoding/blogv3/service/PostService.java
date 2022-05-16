@@ -111,6 +111,7 @@ public class PostService {
         // 리턴값 만들기
         postDetailRespDto.setPost(postEntity);
         postDetailRespDto.setPageOwner(false);
+        postDetailRespDto.setLoveId(0);
 
         // 좋아요 유무 추가하기 (로그인 한 사람이 해당 게시글을 좋아하는지)
         postDetailRespDto.setLove(false);
@@ -136,8 +137,11 @@ public class PostService {
         // (1) 로그인 한 사람의 userId와 상세보기 한 postId로 Love 테이블에서 SELECT해서 row가 있으면 true
         Optional<Love> loveOp = loveRepository.mFindByUserIdAndPostId(principal.getId(), id);
         if (loveOp.isPresent()) {
+            Love loveEntity = loveOp.get();
+            postDetailRespDto.setLoveId(loveEntity.getId());
             postDetailRespDto.setLove(true);
         } else {
+            postDetailRespDto.setLoveId(0);
             postDetailRespDto.setLove(false);
         }
 
