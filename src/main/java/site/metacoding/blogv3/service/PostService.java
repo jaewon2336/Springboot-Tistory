@@ -97,6 +97,7 @@ public class PostService {
         }
     }
 
+    // 비로그인 상태일 때 상세보기
     @Transactional
     public PostDetailRespDto 게시글상세보기(Integer id) {
 
@@ -111,7 +112,6 @@ public class PostService {
         // 리턴값 만들기
         postDetailRespDto.setPost(postEntity);
         postDetailRespDto.setPageOwner(false);
-        postDetailRespDto.setLoveId(0);
 
         // 좋아요 유무 추가하기 (로그인 한 사람이 해당 게시글을 좋아하는지)
         postDetailRespDto.setLove(false);
@@ -119,6 +119,7 @@ public class PostService {
         return postDetailRespDto;
     }
 
+    // 로그인 상태일 때 상세보기
     @Transactional
     public PostDetailRespDto 게시글상세보기(Integer id, User principal) {
 
@@ -141,7 +142,6 @@ public class PostService {
             postDetailRespDto.setLoveId(loveEntity.getId());
             postDetailRespDto.setLove(true);
         } else {
-            postDetailRespDto.setLoveId(0);
             postDetailRespDto.setLove(false);
         }
 
