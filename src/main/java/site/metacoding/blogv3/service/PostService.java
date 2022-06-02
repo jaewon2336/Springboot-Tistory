@@ -15,10 +15,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import site.metacoding.blogv3.domain.Love.Love;
-import site.metacoding.blogv3.domain.Love.LoveRepository;
 import site.metacoding.blogv3.domain.category.Category;
 import site.metacoding.blogv3.domain.category.CategoryRepository;
+import site.metacoding.blogv3.domain.love.Love;
+import site.metacoding.blogv3.domain.love.LoveRepository;
 import site.metacoding.blogv3.domain.post.Post;
 import site.metacoding.blogv3.domain.post.PostRepository;
 import site.metacoding.blogv3.domain.user.User;

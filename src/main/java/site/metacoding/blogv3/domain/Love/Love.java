@@ -1,4 +1,4 @@
-package site.metacoding.blogv3.domain.Love;
+package site.metacoding.blogv3.domain.love;
 
 import java.time.LocalDateTime;
 
