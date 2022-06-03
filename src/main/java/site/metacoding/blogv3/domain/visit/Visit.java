@@ -18,10 +18,10 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import site.metacoding.blogv3.domain.user.User;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@AllArgsConstructor
 @NoArgsConstructor
 @Data
 @EntityListeners(AuditingEntityListener.class)
@@ -45,4 +45,13 @@ public class Visit {
     private LocalDateTime createDate;
     @LastModifiedDate
     private LocalDateTime updateDate;
+
+    @Builder
+    public Visit(Integer id, Long totalCount, User user, LocalDateTime createDate, LocalDateTime updateDate) {
+        this.id = id;
+        this.totalCount = totalCount;
+        this.user = user;
+        this.createDate = createDate;
+        this.updateDate = updateDate;
+    }
 }

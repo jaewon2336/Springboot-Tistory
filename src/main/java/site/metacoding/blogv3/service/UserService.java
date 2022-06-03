@@ -56,7 +56,7 @@ public class UserService {
     }
 
     @Transactional
-    public void 회원가입(User user) {
+    public User 회원가입(User user) {
         // 1. save 한번
         String rawPassword = user.getPassword(); // 1234
         // 시큐리티가 해시로 암호화 안되어있으면 로그인에 실패 -> 시큐리티에게 암호화 알고리즘 알려주는 것 : IoC 등록
@@ -70,6 +70,8 @@ public class UserService {
         visit.setTotalCount(0L);
         visit.setUser(userEntity); // 터뜨리고 테스트 해보기
         visitRepository.save(visit);
+
+        return userEntity;
     }
 
     public boolean 유저네임중복체크(String username) {
