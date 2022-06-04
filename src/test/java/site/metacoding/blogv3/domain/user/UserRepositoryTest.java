@@ -61,20 +61,37 @@ public class UserRepositoryTest {
     @Order(3)
     public void findById_테스트() {
         // given
+        Integer id = 1;
 
         // when
+        Optional<User> userOp = userRepository.findById(id);
 
-        // then
+        if (userOp.isPresent()) {
+            User userEntity = userOp.get();
+
+            // then
+            assertEquals(id, userEntity.getUsername());
+        }
     }
 
     @Test
     @Order(4)
     public void findByUsernameAndEmail_테스트() {
         // given
+        String username = "ssar";
+        String email = "ssar@nate.com";
 
         // when
+        Optional<User> userOp = userRepository.findByUsernameAndEmail(username, email);
 
-        // then
+        if (userOp.isPresent()) {
+            User userEntity = userOp.get();
+
+            // then
+            assertEquals(username, userEntity.getUsername());
+            assertEquals(email, userEntity.getEmail());
+        }
+
     }
 
 }
