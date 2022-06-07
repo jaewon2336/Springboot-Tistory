@@ -90,4 +90,9 @@ public class UserController {
     public String updateForm(@PathVariable Integer id) {
         return "/user/updateForm";
     }
+
+    @GetMapping("/user/password-reset-form")
+    public String passwordResetForm() {
+        return "/user/passwordResetForm";
+    }
 }
