@@ -12,6 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -25,6 +26,7 @@ import site.metacoding.blogv3.domain.user.User;
 
 // SpringbootTest + MockMvc -> 메모리에 다 올림
 // MockMvcTest + MockMvc -> 컨트롤러 앞단이 메모리에 올라옴
+@ActiveProfiles("test") // test 설정파일로 실행 -> h2
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 // @AutoConfigureMockMvc // MockMvc를 IoC에 띄워라
 public class UserControllerTest {
