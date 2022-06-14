@@ -1,4 +1,4 @@
-# 개발 할 때 dev
+# 테스트 할 때 test
 server:
   port: 8080
   servlet:

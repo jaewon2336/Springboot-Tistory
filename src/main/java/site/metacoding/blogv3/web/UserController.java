@@ -50,8 +50,8 @@ public class UserController {
         return "/user/joinForm";
     }
 
-    @GetMapping("/find-password")
-    public String findPassword() {
+    @GetMapping("/user/password-reset-form")
+    public String passwordResetForm() {
         return "/user/passwordResetForm";
     }
 
@@ -89,10 +89,5 @@ public class UserController {
     @GetMapping("/s/user/{id}")
     public String updateForm(@PathVariable Integer id) {
         return "/user/updateForm";
-    }
-
-    @GetMapping("/user/password-reset-form")
-    public String passwordResetForm() {
-        return "/user/passwordResetForm";
     }
 }

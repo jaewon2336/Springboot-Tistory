@@ -21,8 +21,8 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(CustomException.class)
-    public String htmlException(Exception e) { // 일반적인 Get(a태그), Post(form태그) 요청 -> html 응답
+    public ResponseEntity<?> htmlException(Exception e) { // 일반적인 Get(a태그), Post(form태그) 요청 -> html 응답
         log.error("에러 발생 : " + e.getMessage());
-        return Script.back(e.getMessage());
+        return new ResponseEntity<>(Script.back(e.getMessage()), HttpStatus.BAD_REQUEST); // 400
     }
 }
