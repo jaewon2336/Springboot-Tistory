@@ -13,10 +13,12 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 
 import lombok.RequiredArgsConstructor;
 import site.metacoding.blogv3.config.auth.LoginUser;
 import site.metacoding.blogv3.domain.category.Category;
+import site.metacoding.blogv3.domain.post.Post;
 import site.metacoding.blogv3.domain.user.User;
 import site.metacoding.blogv3.handler.ex.CustomException;
 import site.metacoding.blogv3.service.PostService;
@@ -105,6 +107,19 @@ public class PostController {
 
         model.addAttribute("categories", categories);
         return "/post/writeForm";
+    }
+
+    @GetMapping("/s/post/{postId}")
+    public String updateForm(@PathVariable Integer postId, @AuthenticationPrincipal LoginUser loginUser, Model model) {
+        PostDetailRespDto postDetailRespDto = postService.게시글상세보기(postId, loginUser.getUser());
+        model.addAttribute("data", postDetailRespDto);
+        return "/post/updateForm";
+    }
+
+    @PutMapping("/s/post/{id}")
+    public ResponseEntity<?> update(@AuthenticationPrincipal LoginUser loginUser, Model model) {
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     // post, category 다 같이 가지고 가야하니까 categoryService 사용하지 말고 postService 사용하기

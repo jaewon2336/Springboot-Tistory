@@ -27,8 +27,6 @@ async function postLike(postId) {
     let responseParse = await response.json();
 
     if (response.status == 201) {
-        alert("좋아요!");
-
         $(`#my-heart`).addClass("my_fake_like");
         $(`#my-heart`).removeClass("my_fake_un_like");
         $(`#my-heart`).removeClass("fa-regular");
@@ -49,7 +47,6 @@ async function postUnLike(postId) {
     });
 
     if (response.status == 200) {
-        alert("좋아요 취소!");
         $(`#my-heart`).addClass("my_fake_un_like");
         $(`#my-heart`).removeClass("my_fake_like");
         $(`#my-heart`).removeClass("fa-solid");
@@ -74,7 +71,6 @@ let postDelete = async () => {
     });
 
     if (response.status == 200) {
-        alert("삭제성공");
         location.href = `/user/${pageOwnerId}/post`;
     } else {
         alert("삭제실패");
