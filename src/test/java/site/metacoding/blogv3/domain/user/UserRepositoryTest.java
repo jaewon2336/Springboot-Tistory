@@ -70,7 +70,7 @@ public class UserRepositoryTest {
             User userEntity = userOp.get();
 
             // then
-            assertEquals(id, userEntity.getUsername());
+            assertEquals(id, userEntity.getId());
         }
     }
 
